@@ -1,5 +1,9 @@
 package root;
 
+/**
+ * @author alifarah
+ *
+ */
 public class Chef implements Runnable {
 
 	
@@ -19,6 +23,7 @@ public class Chef implements Runnable {
 			synchronized(this.table)
 			{
 				System.out.println(this.ingredient +" thread is checking if the table has all the ingredients.");
+				// loop while the table doesn't have all the ingredients needed to make a sandwich for the chef
 				while(!table.hasAllIngredients(this.ingredient))
 				{
 					try {
@@ -33,13 +38,15 @@ public class Chef implements Runnable {
 				}
 				
 				System.out.println("Table has all ingredients, " + this.ingredient + " thread is consuming all the ingredients.");
+				// if the table has all the ingredients make sandwich and eat it 
 				table.consumeIngredients();
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(2000); // slow things down
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				System.out.println("Notify All Threads.\n");
+				// alert all threads in wait set
 				this.table.notifyAll();
 			}
 		}
