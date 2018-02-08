@@ -46,7 +46,7 @@ public class Agent implements Runnable {
 				// if the table is empty all two random ingredients 
 				System.out.println("Table is not full. Adding ingredients.");
 				Collections.shuffle(this.ingredients); // shuffle the ingredients list to randomize the order 
-				table.addIngredients(this.ingredients.get(0));
+				table.addIngredients(this.ingredients.get(2));
 				table.addIngredients(this.ingredients.get(1));
 				try {
 					Thread.sleep(1000); // slow things down.
