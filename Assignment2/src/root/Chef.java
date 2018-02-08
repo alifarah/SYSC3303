@@ -18,10 +18,11 @@ public class Chef implements Runnable {
 	
 	@Override
 	public void run() {
-		while(true)
+		synchronized(this.table)
 		{
-			synchronized(this.table)
+			while(!this.table.doneMakingSandwiches())
 			{
+		
 				System.out.println(this.ingredient +" thread is checking if the table has all the ingredients.");
 				// loop while the table doesn't have all the ingredients needed to make a sandwich for the chef
 				while(!table.hasAllIngredients(this.ingredient))
@@ -29,8 +30,15 @@ public class Chef implements Runnable {
 					try {
 						System.out.println("Table is missing ingredients. Blocking " + this.ingredient + " thread.\n");
 						this.table.wait();
+						
+						if(this.table.doneMakingSandwiches())
+						{
+							System.out.println(this.ingredient + " thread is done. Exiting");
+							return;
+						}
+						
 						System.out.println(this.ingredient +" thread is unblocked. Checking if the table has all the ingredients.");
-
+	
 					} catch(InterruptedException e)
 					{
 						return;
@@ -41,7 +49,7 @@ public class Chef implements Runnable {
 				// if the table has all the ingredients make sandwich and eat it 
 				table.consumeIngredients();
 				try {
-					Thread.sleep(2000); // slow things down
+					Thread.sleep(1000); // slow things down
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -50,6 +58,8 @@ public class Chef implements Runnable {
 				this.table.notifyAll();
 			}
 		}
+		
+		System.out.println(this.ingredient + " thread is done. Exiting");
 	}	
 	
 }

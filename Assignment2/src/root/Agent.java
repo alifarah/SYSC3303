@@ -17,9 +17,9 @@ public class Agent implements Runnable {
 	
 	@Override
 	public void run() {
-		while(true)
+		synchronized(this.table)
 		{
-			synchronized(this.table)
+			while(!this.table.doneMakingSandwiches())
 			{
 				System.out.println("The Agent thread is checking if the table is full.");
 				// loop while the table is full.
@@ -28,6 +28,13 @@ public class Agent implements Runnable {
 					try {
 						System.out.println("Table is full. Blocking the agent thread\n");
 						this.table.wait();
+						
+						if(this.table.doneMakingSandwiches())
+						{
+							System.out.println("Agent thread is done. Exiting");
+							return;
+						}
+						
 						System.out.println("Agent thread is unblocked. Checking if the table is full again.");
 					} catch(InterruptedException e)
 					{
@@ -42,7 +49,7 @@ public class Agent implements Runnable {
 				table.addIngredients(this.ingredients.get(0));
 				table.addIngredients(this.ingredients.get(1));
 				try {
-					Thread.sleep(2000); // slow things down.
+					Thread.sleep(1000); // slow things down.
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -51,6 +58,8 @@ public class Agent implements Runnable {
 				this.table.notifyAll();
 			}
 		}
+		System.out.println("Agent thread is done. Exiting");
+
 	}	
 
 }

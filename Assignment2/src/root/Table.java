@@ -10,6 +10,8 @@ public class Table {
 
 	private List<String> ingredients;
 	private static final int maxIngredients = 2;
+	private static final int maxSandwiches = 20;
+	private int numberOfSandwichesMade;
 	
 	public Table()
 	{
@@ -27,6 +29,13 @@ public class Table {
 		this.ingredients.add(ingredient);
 	}
 	
+	/**
+	 * @return whether you are done making sandwiches 
+	 */
+	public boolean doneMakingSandwiches()
+	{
+		return this.numberOfSandwichesMade >= maxSandwiches;
+	}
 	
 	/**
 	 * removes all ingredients currently on the table 
@@ -34,6 +43,8 @@ public class Table {
 	public void consumeIngredients()
 	{
 		this.ingredients.clear();
+		this.numberOfSandwichesMade++;
+		System.out.println("Sandwich number " + this.numberOfSandwichesMade + " has been made.");
 	}
 	
 	
